@@ -35,7 +35,7 @@ export default function MTGGuessingGame() {
     if (!card) return;
 
     if (guess.toLowerCase().trim() === card.name.toLowerCase().trim()) {
-      setFeedback("🔥 Correct! 🔥");
+      setFeedback("🔥 Magic Abused! 🔥");
       setCoveredSquares([]); // Reveal image
     } else {
       setFeedback("❌ Uh-Oh Stinky");
