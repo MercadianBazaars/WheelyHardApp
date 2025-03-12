@@ -53,9 +53,16 @@ body {
   z-index: 10;
 }
 
+/* Guess Input & Patreon Button Container */
+.input-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
 /* Input Field */
 .guess-input {
-  margin-top: 20px;
   padding: 10px;
   font-size: 16px;
   width: 200px;
@@ -66,26 +73,20 @@ body {
   color: white;
 }
 
-/* Autocomplete Dropdown */
-.suggestions-dropdown {
-  position: absolute;
-  top: 100%;
-  width: 100%;
-  background: white;
-  color: black;
-  border: 1px solid gray;
-  max-height: 200px;
-  overflow-y: auto;
-}
-
-/* Autocomplete Item */
-.suggestion-item {
-  padding: 8px;
+/* Patreon Button */
+.patreon-button {
+  padding: 10px;
+  font-size: 14px;
+  background-color: #FF424D;
+  color: white;
+  border: none;
+  border-radius: 5px;
   cursor: pointer;
+  font-weight: bold;
 }
 
-.suggestion-item:hover {
-  background: lightgray;
+.patreon-button:hover {
+  background-color: #D73C47;
 }
 
 /* Guess Count */
@@ -99,4 +100,42 @@ body {
   margin-top: 10px;
   font-size: 18px;
   font-weight: bold;
+}
+
+/* Popup Modal */
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.popup-content {
+  position: relative;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: red;
+  color: white;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 5px;
+}
+
+/* Full Card Image */
+.full-card-image {
+  max-width: 100%;
+  height: auto;
 }
