@@ -70,6 +70,33 @@ export default function MTGGuessingGame() {
     }
   };
 
+  const fetchSuggestions = async (query) => {
+    if (query.length < 2) {
+      setSuggestions([]);
+      return;
+    }
+
+    try {
+      const response = await fetch(`${SCRYFALL_SEARCH_API}${query}`);
+      const data = await response.json();
+      setSuggestions(data.data || []);
+    } catch (error) {
+      console.error("Error fetching suggestions:", error);
+      setSuggestions([]);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setGuess(value);
+    fetchSuggestions(value);
+  };
+
+  const handleSuggestionClick = (name) => {
+    setGuess(name);
+    setSuggestions([]);
+  };
+
   const closePopup = () => {
     window.location.reload();
   };
@@ -99,11 +126,22 @@ export default function MTGGuessingGame() {
         <input
           type="text"
           value={guess}
-          onChange={(e) => setGuess(e.target.value)}
+          onChange={handleInputChange}
           onKeyDown={(e) => e.key === "Enter" && handleGuess()}
           placeholder="Enter your guess..."
           className="guess-input"
         />
+
+        {suggestions.length > 0 && (
+          <div className="suggestions-dropdown">
+            {suggestions.map((name, index) => (
+              <div key={index} onClick={() => handleSuggestionClick(name)} className="suggestion-item">
+                {name}
+              </div>
+            ))}
+          </div>
+        )}
+
         <button
           className="patreon-button"
           onClick={() => window.open(PATREON_URL, "_blank")}
