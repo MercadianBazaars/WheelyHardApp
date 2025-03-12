@@ -1,7 +1,7 @@
-/* General Game Layout */
+/* General Layout */
 body {
   margin: 0;
-  background-color: #8B4513; /* Copper Brown */
+  background-color: #8B4513;
   font-family: Arial, sans-serif;
   color: white;
   text-align: center;
@@ -25,7 +25,7 @@ body {
   margin-bottom: 20px;
 }
 
-/* Image Frame (White Border) */
+/* Image Frame */
 .image-frame {
   position: relative;
   width: 300px;
@@ -44,14 +44,14 @@ body {
   object-fit: cover;
 }
 
-/* Black Squares Covering the Image */
+/* Black Blocks Covering the Image */
 .cover-square {
   position: absolute;
   width: 34%;
   height: 34%;
   background-color: black;
   z-index: 10;
-}  /* <---- FIXED: Closing bracket added */
+}
 
 /* Input Field */
 .guess-input {
@@ -64,6 +64,28 @@ body {
   border: 1px solid white;
   background-color: #5A2E0E;
   color: white;
+}
+
+/* Autocomplete Dropdown */
+.suggestions-dropdown {
+  position: absolute;
+  top: 100%;
+  width: 100%;
+  background: white;
+  color: black;
+  border: 1px solid gray;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+/* Autocomplete Item */
+.suggestion-item {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.suggestion-item:hover {
+  background: lightgray;
 }
 
 /* Guess Count */
