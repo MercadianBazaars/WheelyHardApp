@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
+import "./index.css";
 
 const SCRYFALL_API = "https://api.scryfall.com/cards/random?q=set:grn&format=json";
+const SCRYFALL_SEARCH_API = "https://api.scryfall.com/cards/autocomplete?q=";
 
 export default function MTGGuessingGame() {
   const [card, setCard] = useState(null);
@@ -8,6 +10,7 @@ export default function MTGGuessingGame() {
   const [guess, setGuess] = useState("");
   const [feedback, setFeedback] = useState("");
   const [guessCount, setGuessCount] = useState(0);
+  const [suggestions, setSuggestions] = useState([]);
 
   useEffect(() => {
     fetchCard();
@@ -25,6 +28,7 @@ export default function MTGGuessingGame() {
       setGuess("");
       setFeedback("");
       setGuessCount(0);
+      setSuggestions([]);
     } catch (error) {
       console.error("Error fetching card:", error);
       setFeedback("Error loading card. Try again.");
@@ -35,10 +39,11 @@ export default function MTGGuessingGame() {
     if (!card) return;
 
     if (guess.toLowerCase().trim() === card.name.toLowerCase().trim()) {
-      setFeedback("🔥 Magic Abused! 🔥");
+      setFeedback("🔥 Correct! 🔥");
       setCoveredSquares([]); // Reveal image
+      setSuggestions([]);
     } else {
-      setFeedback("❌ Uh-Oh Stinky");
+      setFeedback("❌ Wrong! Try again.");
       revealMore();
     }
 
@@ -57,81 +62,78 @@ export default function MTGGuessingGame() {
     }
   };
 
-  return (
-    <div style={{
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-      width: "100vw",
-      height: "100vh",
-      backgroundColor: "#8B4513",
-      color: "white"
-    }}>
-      <h1 style={{ fontSize: "24px", marginBottom: "20px" }}>Wheely Hard</h1>
+  const fetchSuggestions = async (query) => {
+    if (query.length < 2) {
+      setSuggestions([]);
+      return;
+    }
 
-      {/* IMAGE CONTAINER WITH PERFECT FIT */}
-      <div style={{
-        position: "relative",
-        width: "300px",
-        height: "420px",
-        border: "4px solid white",
-        boxSizing: "border-box",  // Ensures image fits inside the border
-        overflow: "hidden",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center"
-      }}>
+    try {
+      const response = await fetch(`${SCRYFALL_SEARCH_API}${query}`);
+      const data = await response.json();
+      setSuggestions(data.data || []);
+    } catch (error) {
+      console.error("Error fetching suggestions:", error);
+      setSuggestions([]);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setGuess(value);
+    fetchSuggestions(value);
+  };
+
+  const handleSuggestionClick = (name) => {
+    setGuess(name);
+    setSuggestions([]);
+  };
+
+  return (
+    <div className="game-container">
+      <h1 className="title">MTG Guessing Game</h1>
+
+      <div className="image-frame">
         {card && (
           <img
             src={card.image_uris?.art_crop}
             alt="Magic Card Art"
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",  // Ensures perfect fit without stretching
-              display: "block"
-            }}
+            className="card-image"
           />
         )}
 
-        {/* BLACK BLOCKS THAT HIDE THE IMAGE */}
         {coveredSquares.map((index) => (
-          <div
-            key={index}
-            style={{
-              position: "absolute",
-              top: `${Math.floor(index / 3) * 33.33}%`,
-              left: `${(index % 3) * 33.33}%`,
-              width: "34%",  // Slightly oversized to remove any gaps
-              height: "34%",
-              backgroundColor: "black",
-              zIndex: 10
-            }}
-          ></div>
+          <div key={index} className="cover-square" style={{
+            top: `${Math.floor(index / 3) * 33.33}%`,
+            left: `${(index % 3) * 33.33}%`
+          }}></div>
         ))}
       </div>
 
-      {/* INPUT FIELD */}
-      <input
-        type="text"
-        value={guess}
-        onChange={(e) => setGuess(e.target.value)}
-        onKeyDown={(e) => e.key === "Enter" && handleGuess()}
-        placeholder="Is it Nyx Weaver..."
-        style={{
-          marginTop: "20px",
-          padding: "10px",
-          fontSize: "16px",
-          width: "200px",
-          textAlign: "center",
-          borderRadius: "5px"
-        }}
-      />
+      <div className="autocomplete-container">
+        <input
+          type="text"
+          value={guess}
+          onChange={handleInputChange}
+          onKeyDown={(e) => e.key === "Enter" && handleGuess()}
+          placeholder="Enter your guess..."
+          className="guess-input"
+        />
 
-      <p style={{ marginTop: "10px", fontSize: "14px" }}>Incorrect Guesses: {guessCount}</p>
+        {suggestions.length > 0 && (
+          <div className="suggestions-dropdown">
+            {suggestions.map((name, index) => (
+              <div key={index} onClick={() => handleSuggestionClick(name)} className="suggestion-item">
+                {name}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
 
-      {feedback && <p style={{ marginTop: "10px", fontSize: "18px", fontWeight: "bold" }}>{feedback}</p>}
+      <p className="guess-count">Incorrect Guesses: {guessCount}</p>
+
+      {feedback && <p className="feedback">{feedback}</p>}
     </div>
   );
 }
