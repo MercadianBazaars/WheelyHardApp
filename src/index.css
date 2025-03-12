@@ -71,4 +71,30 @@ input {
   width: calc(33.3% + 10px);
   height: calc(33.3% + 10px);
   border-radius: 5px;
+/* Image container */
+.image-container {
+  position: relative;
+  width: 250px; /* Adjust width as needed */
+  height: auto;
+  margin: 20px auto;
+}
+
+/* Style the card image */
+#cardImage {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 10px;
+}
+
+/* Overlay to cover the image */
+#imageOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8); /* Dark overlay */
+  display: block;
+  border-radius: 10px;
 }
