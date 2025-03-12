@@ -38,7 +38,7 @@ export default function MTGGuessingGame() {
       setFeedback("🔥 Correct! 🔥");
       setCoveredSquares([]); // Reveal image
     } else {
-      setFeedback("❌ Wrong! Try again.");
+      setFeedback("❌ Uh-Oh Stinky");
       revealMore();
     }
 
@@ -68,7 +68,7 @@ export default function MTGGuessingGame() {
       backgroundColor: "#8B4513",
       color: "white"
     }}>
-      <h1 style={{ fontSize: "24px", marginBottom: "20px" }}>MTG Guessing Game</h1>
+      <h1 style={{ fontSize: "24px", marginBottom: "20px" }}>Wheely Hard</h1>
 
       {/* IMAGE CONTAINER WITH PERFECT FIT */}
       <div style={{
@@ -118,7 +118,7 @@ export default function MTGGuessingGame() {
         value={guess}
         onChange={(e) => setGuess(e.target.value)}
         onKeyDown={(e) => e.key === "Enter" && handleGuess()}
-        placeholder="Enter your guess..."
+        placeholder="Is it Nyx Weaver..."
         style={{
           marginTop: "20px",
           padding: "10px",
