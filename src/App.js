@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./index.css";
+import D10Dice from "./D10Dice"; // Import the 3D d10 dice component
 
 const SCRYFALL_API = "https://api.scryfall.com/cards/random?q=set:grn&format=json";
 const PATREON_URL = "https://www.patreon.com/c/MercadianBazaars";
@@ -10,7 +11,6 @@ export default function MTGGuessingGame() {
   const [guess, setGuess] = useState("");
   const [feedback, setFeedback] = useState("");
   const [guessCount, setGuessCount] = useState(10);
-  const [rolling, setRolling] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
@@ -58,13 +58,7 @@ export default function MTGGuessingGame() {
       } while (!coveredSquares.includes(newPiece));
 
       setCoveredSquares(coveredSquares.filter((piece) => piece !== newPiece));
-
-      // Animate the d10 rolling effect
-      setRolling(true);
-      setTimeout(() => {
-        setGuessCount((prev) => prev - 1);
-        setRolling(false);
-      }, 300);
+      setGuessCount((prev) => Math.max(prev - 1, 0));
 
       if (guessCount - 1 === 1) {
         setShowPopup(true);
@@ -93,9 +87,9 @@ export default function MTGGuessingGame() {
         ))}
       </div>
 
-      {/* Animated d10 Counter */}
-      <div className={`dice-container ${rolling ? "roll" : ""}`}>
-        {guessCount}
+      {/* 3D DICE */}
+      <div className="dice-container">
+        <D10Dice guessCount={guessCount} />
       </div>
 
       <button className="patreon-button" onClick={() => window.open(PATREON_URL, "_blank")}>
