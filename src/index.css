@@ -1,13 +1,4 @@
-/* Game Layout (Image + Dice + Table Side by Side) */
-.game-content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 30px; /* Space between dice, image, and table */
-  margin-top: 20px;
-}
-
-/* D10 Dice Container (Left Side) */
+/* Remove Dice Styles */
 .dice-container {
   width: 200px;
   height: 200px;
@@ -16,7 +7,7 @@
   justify-content: center;
 }
 
-/* Incorrect Guesses Table (Right Side) */
+/* Remove Incorrect Guesses Table */
 .guess-table {
   width: 200px;
   padding: 10px;
