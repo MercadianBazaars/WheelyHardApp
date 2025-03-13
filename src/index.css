@@ -1,20 +1,20 @@
-/* Remove Dice Styles */
-.dice-container {
-  width: 200px;
-  height: 200px;
+/* Game Layout (Image + Table Side by Side) */
+.game-content {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
+  gap: 30px; /* Space between image and table */
+  margin-top: 20px;
 }
 
-/* Remove Incorrect Guesses Table */
+/* Incorrect Guesses Table (Right Side) */
 .guess-table {
-  width: 200px;
+  width: 250px;
   padding: 10px;
-  background: #333;
-  color: white;
+  background: white;
+  color: black;
   border-radius: 8px;
-  border: 2px solid white;
+  border: 2px solid black;
   text-align: left;
 }
 
@@ -32,5 +32,5 @@
 .guess-table li {
   font-size: 14px;
   padding: 5px;
-  border-bottom: 1px solid white;
+  border-bottom: 2px solid red; /* Red underline */
 }
