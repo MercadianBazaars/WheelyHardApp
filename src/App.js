@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./index.css";
 
 const SCRYFALL_API = "https://api.scryfall.com/cards/random?q=set:grn&format=json";
@@ -10,12 +10,25 @@ export default function MTGGuessingGame() {
   const [coveredSquares, setCoveredSquares] = useState([]);
   const [guess, setGuess] = useState("");
   const [feedback, setFeedback] = useState("");
-  const [guessCount, setGuessCount] = useState(0);
+  const [guessCount, setGuessCount] = useState(9);
   const [suggestions, setSuggestions] = useState([]);
+  const [selectedIndex, setSelectedIndex] = useState(-1); // For keyboard navigation
   const [showPopup, setShowPopup] = useState(false);
+  const inputRef = useRef(null);
 
   useEffect(() => {
     fetchCard();
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (inputRef.current && !inputRef.current.contains(event.target)) {
+        setSuggestions([]);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const fetchCard = async () => {
@@ -26,10 +39,9 @@ export default function MTGGuessingGame() {
 
       setCard(data);
       setCoveredSquares(Array.from({ length: 9 }, (_, i) => i));
-
       setGuess("");
       setFeedback("");
-      setGuessCount(0);
+      setGuessCount(9);
       setSuggestions([]);
       setShowPopup(false);
     } catch (error) {
@@ -52,6 +64,7 @@ export default function MTGGuessingGame() {
     }
 
     setGuess("");
+    setSelectedIndex(-1);
   };
 
   const revealMore = () => {
@@ -62,9 +75,9 @@ export default function MTGGuessingGame() {
       } while (!coveredSquares.includes(newPiece));
 
       setCoveredSquares(coveredSquares.filter((piece) => piece !== newPiece));
-      setGuessCount(guessCount + 1);
+      setGuessCount(guessCount - 1);
 
-      if (coveredSquares.length === 1) {
+      if (guessCount - 1 === 0) {
         setShowPopup(true);
       }
     }
@@ -92,11 +105,21 @@ export default function MTGGuessingGame() {
     const value = e.target.value;
     setGuess(value);
     fetchSuggestions(value);
+    setSelectedIndex(-1);
   };
 
-  const handleSuggestionClick = (name) => {
-    setGuess(name);
-    setSuggestions([]);
+  const handleKeyDown = (e) => {
+    if (e.key === "ArrowDown") {
+      setSelectedIndex((prev) => (prev < suggestions.length - 1 ? prev + 1 : prev));
+    } else if (e.key === "ArrowUp") {
+      setSelectedIndex((prev) => (prev > 0 ? prev - 1 : -1));
+    } else if (e.key === "Enter" && selectedIndex >= 0) {
+      setGuess(suggestions[selectedIndex]);
+      setSuggestions([]);
+      setSelectedIndex(-1);
+    } else if (e.key === "Enter") {
+      handleGuess();
+    }
   };
 
   const closePopup = () => {
@@ -124,12 +147,12 @@ export default function MTGGuessingGame() {
         ))}
       </div>
 
-      <div className="input-container">
+      <div className="input-container" ref={inputRef}>
         <input
           type="text"
           value={guess}
           onChange={handleInputChange}
-          onKeyDown={(e) => e.key === "Enter" && handleGuess()}
+          onKeyDown={handleKeyDown}
           placeholder="Is it Nyx Weaver..."
           className="guess-input"
         />
@@ -137,7 +160,14 @@ export default function MTGGuessingGame() {
         {suggestions.length > 0 && (
           <div className="suggestions-dropdown">
             {suggestions.map((name, index) => (
-              <div key={index} onClick={() => handleSuggestionClick(name)} className="suggestion-item">
+              <div
+                key={index}
+                onClick={() => {
+                  setGuess(name);
+                  setSuggestions([]);
+                }}
+                className={`suggestion-item ${index === selectedIndex ? "selected" : ""}`}
+              >
                 {name}
               </div>
             ))}
@@ -152,7 +182,7 @@ export default function MTGGuessingGame() {
         ❤️ Support on Patreon
       </button>
 
-      <p className="guess-count">Incorrect Guesses: {guessCount}</p>
+      <p className="guess-count">Guesses Remaining: {guessCount}</p>
 
       {feedback && <p className="feedback">{feedback}</p>}
 
