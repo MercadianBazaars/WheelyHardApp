@@ -1,31 +1,40 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useSpring, a } from "@react-spring/three";
-import { IcosahedronGeometry } from "three";
+import { a, useSpring } from "@react-spring/three";
+import { OrbitControls } from "@react-three/drei";
 
-function D10({ number }) {
+function D10() {
   const meshRef = useRef();
 
-  // Rotate the dice when the number changes (simulating a roll)
-  const { rotation } = useSpring({
-    rotation: [Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI],
-    config: { mass: 1, tension: 180, friction: 12 },
+  // Drop-in animation using React Spring
+  const { position } = useSpring({
+    position: [0, 0, 0], // Final position
+    from: [0, 5, 0], // Start high above
+    config: { mass: 1, tension: 200, friction: 10 },
+  });
+
+  // Rotate the die continuously
+  useFrame(() => {
+    if (meshRef.current) {
+      meshRef.current.rotation.y += 0.02;
+    }
   });
 
   return (
-    <a.mesh ref={meshRef} rotation={rotation}>
+    <a.mesh ref={meshRef} position={position}>
       <icosahedronGeometry args={[1, 0]} />
       <meshStandardMaterial color="blue" wireframe />
     </a.mesh>
   );
 }
 
-export default function D10Dice({ guessCount }) {
+export default function D10Dice() {
   return (
-    <Canvas camera={{ position: [0, 0, 3] }}>
-      <ambientLight intensity={0.5} />
-      <directionalLight position={[3, 3, 3]} intensity={1} />
-      <D10 number={guessCount} />
+    <Canvas camera={{ position: [0, 0, 5] }}>
+      <ambientLight intensity={0.7} />
+      <directionalLight position={[5, 5, 5]} intensity={1} />
+      <D10 />
+      <OrbitControls enableZoom={false} />
     </Canvas>
   );
 }
