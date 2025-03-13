@@ -8,8 +8,8 @@ function D10() {
 
   // Drop-in animation using React Spring
   const { position } = useSpring({
-    position: [0, 0, 0], // Final position
-    from: [0, 5, 0], // Start high above
+    position: [-3, 0, 0], // Moves the dice to the left
+    from: [-3, 5, 0], // Starts above the screen
     config: { mass: 1, tension: 200, friction: 10 },
   });
 
@@ -21,7 +21,7 @@ function D10() {
   });
 
   return (
-    <a.mesh ref={meshRef} position={position}>
+    <a.mesh ref={meshRef} position={position} scale={1.5}>
       <icosahedronGeometry args={[1, 0]} />
       <meshStandardMaterial color="blue" wireframe />
     </a.mesh>
