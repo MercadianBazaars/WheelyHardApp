@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
-import "./index.css";
 
 const SCRYFALL_API = "https://api.scryfall.com/cards/random?q=set:grn&format=json";
-const SCRYFALL_SEARCH_API = "https://api.scryfall.com/cards/autocomplete?q=";
-const PATREON_URL = "https://www.patreon.com/c/MercadianBazaars/membership"; 
 
 export default function MTGGuessingGame() {
   const [card, setCard] = useState(null);
@@ -11,8 +8,6 @@ export default function MTGGuessingGame() {
   const [guess, setGuess] = useState("");
   const [feedback, setFeedback] = useState("");
   const [guessCount, setGuessCount] = useState(0);
-  const [suggestions, setSuggestions] = useState([]);
-  const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
     fetchCard();
@@ -25,13 +20,11 @@ export default function MTGGuessingGame() {
       const data = await response.json();
 
       setCard(data);
-      setCoveredSquares(Array.from({ length: 9 }, (_, i) => i));
+      setCoveredSquares(Array.from({ length: 9 }, (_, i) => i)); // Fully cover the image
 
       setGuess("");
       setFeedback("");
       setGuessCount(0);
-      setSuggestions([]);
-      setShowPopup(false);
     } catch (error) {
       console.error("Error fetching card:", error);
       setFeedback("Error loading card. Try again.");
@@ -42,12 +35,10 @@ export default function MTGGuessingGame() {
     if (!card) return;
 
     if (guess.toLowerCase().trim() === card.name.toLowerCase().trim()) {
-      setFeedback("🔥 Correct! 🔥");
-      setCoveredSquares([]);
-      setShowPopup(true);
-      setSuggestions([]);
+      setFeedback("🔥 Magic Abused! 🔥");
+      setCoveredSquares([]); // Reveal image
     } else {
-      setFeedback("❌ Wrong! Try again.");
+      setFeedback("❌ Uh-Oh Stinky");
       revealMore();
     }
 
@@ -63,107 +54,84 @@ export default function MTGGuessingGame() {
 
       setCoveredSquares(coveredSquares.filter((piece) => piece !== newPiece));
       setGuessCount(guessCount + 1);
-
-      if (coveredSquares.length === 1) {
-        setShowPopup(true);
-      }
     }
-  };
-
-  const fetchSuggestions = async (query) => {
-    if (query.length < 2) {
-      setSuggestions([]);
-      return;
-    }
-
-    try {
-      const response = await fetch(`${SCRYFALL_SEARCH_API}${query}`);
-      if (!response.ok) throw new Error("Failed to fetch suggestions");
-      const data = await response.json();
-
-      setSuggestions(data.data || []);
-    } catch (error) {
-      console.error("Error fetching suggestions:", error);
-      setSuggestions([]);
-    }
-  };
-
-  const handleInputChange = (e) => {
-    const value = e.target.value;
-    setGuess(value);
-    fetchSuggestions(value);
-  };
-
-  const handleSuggestionClick = (name) => {
-    setGuess(name);
-    setSuggestions([]);
-  };
-
-  const closePopup = () => {
-    window.location.reload();
   };
 
   return (
-    <div className="game-container">
-      <h1 className="title">MTG Guessing Game</h1>
+    <div style={{
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      width: "100vw",
+      height: "100vh",
+      backgroundColor: "#8B4513",
+      color: "white"
+    }}>
+      <h1 style={{ fontSize: "24px", marginBottom: "20px" }}>Wheely Hard</h1>
 
-      <div className="image-frame">
+      {/* IMAGE CONTAINER WITH PERFECT FIT */}
+      <div style={{
+        position: "relative",
+        width: "300px",
+        height: "420px",
+        border: "4px solid white",
+        boxSizing: "border-box",  // Ensures image fits inside the border
+        overflow: "hidden",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center"
+      }}>
         {card && (
           <img
             src={card.image_uris?.art_crop}
             alt="Magic Card Art"
-            className="card-image"
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",  // Ensures perfect fit without stretching
+              display: "block"
+            }}
           />
         )}
 
+        {/* BLACK BLOCKS THAT HIDE THE IMAGE */}
         {coveredSquares.map((index) => (
-          <div key={index} className="cover-square" style={{
-            top: `${Math.floor(index / 3) * 33.33}%`,
-            left: `${(index % 3) * 33.33}%`
-          }}></div>
+          <div
+            key={index}
+            style={{
+              position: "absolute",
+              top: `${Math.floor(index / 3) * 33.33}%`,
+              left: `${(index % 3) * 33.33}%`,
+              width: "34%",  // Slightly oversized to remove any gaps
+              height: "34%",
+              backgroundColor: "black",
+              zIndex: 10
+            }}
+          ></div>
         ))}
       </div>
 
-      <div className="input-container">
-        <input
-          type="text"
-          value={guess}
-          onChange={handleInputChange}
-          onKeyDown={(e) => e.key === "Enter" && handleGuess()}
-          placeholder="Enter your guess..."
-          className="guess-input"
-        />
+      {/* INPUT FIELD */}
+      <input
+        type="text"
+        value={guess}
+        onChange={(e) => setGuess(e.target.value)}
+        onKeyDown={(e) => e.key === "Enter" && handleGuess()}
+        placeholder="Is it Nyx Weaver..."
+        style={{
+          marginTop: "20px",
+          padding: "10px",
+          fontSize: "16px",
+          width: "200px",
+          textAlign: "center",
+          borderRadius: "5px"
+        }}
+      />
 
-        {suggestions.length > 0 && (
-          <div className="suggestions-dropdown">
-            {suggestions.map((name, index) => (
-              <div key={index} onClick={() => handleSuggestionClick(name)} className="suggestion-item">
-                {name}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+      <p style={{ marginTop: "10px", fontSize: "14px" }}>Incorrect Guesses: {guessCount}</p>
 
-      <button
-        className="patreon-button"
-        onClick={() => window.open(PATREON_URL, "_blank")}
-      >
-        ❤️ Support on Patreon
-      </button>
-
-      <p className="guess-count">Incorrect Guesses: {guessCount}</p>
-
-      {feedback && <p className="feedback">{feedback}</p>}
-
-      {showPopup && card && (
-        <div className="popup">
-          <div className="popup-content">
-            <button className="close-btn" onClick={closePopup}>✖</button>
-            <img src={card.image_uris?.normal} alt="Full Card" className="full-card-image" />
-          </div>
-        </div>
-      )}
+      {feedback && <p style={{ marginTop: "10px", fontSize: "18px", fontWeight: "bold" }}>{feedback}</p>}
     </div>
   );
 }
