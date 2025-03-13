@@ -74,23 +74,36 @@ export default function MTGGuessingGame() {
     <div className="game-container">
       <h1 className="title">Wheely Hard</h1>
 
-      <div className="image-frame">
-        {card && (
-          <img src={card.image_uris?.art_crop} alt="Magic Card Art" className="card-image" />
-        )}
+      {/* Layout with Dice on the Left & Image in the Center */}
+      <div className="game-content">
+        {/* 3D DICE ON THE LEFT */}
+        <div className="dice-container">
+          <D10Dice guessCount={guessCount} />
+        </div>
 
-        {coveredSquares.map((index) => (
-          <div key={index} className="cover-square" style={{
-            top: `${Math.floor(index / 3) * 33.33}%`,
-            left: `${(index % 3) * 33.33}%`
-          }}></div>
-        ))}
+        {/* IMAGE IN THE CENTER */}
+        <div className="image-frame">
+          {card && (
+            <img src={card.image_uris?.art_crop} alt="Magic Card Art" className="card-image" />
+          )}
+          {coveredSquares.map((index) => (
+            <div key={index} className="cover-square" style={{
+              top: `${Math.floor(index / 3) * 33.33}%`,
+              left: `${(index % 3) * 33.33}%`
+            }}></div>
+          ))}
+        </div>
       </div>
 
-      {/* 3D DICE */}
-      <div className="dice-container">
-        <D10Dice guessCount={guessCount} />
-      </div>
+      {/* Guess Input */}
+      <input
+        type="text"
+        value={guess}
+        onChange={(e) => setGuess(e.target.value)}
+        onKeyDown={(e) => e.key === "Enter" && handleGuess()}
+        placeholder="Enter your guess..."
+        className="guess-input"
+      />
 
       <button className="patreon-button" onClick={() => window.open(PATREON_URL, "_blank")}>
         ❤️ Support on Patreon
