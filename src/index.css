@@ -143,3 +143,9 @@ body {
   width: 100%;
   height: auto;
 }
+/* Dice Styling */
+.dice-container {
+  width: 150px;
+  height: 150px;
+  margin-top: 20px;
+}
