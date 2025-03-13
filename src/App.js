@@ -42,12 +42,12 @@ export default function MTGGuessingGame() {
     if (!card) return;
 
     if (guess.toLowerCase().trim() === card.name.toLowerCase().trim()) {
-      setFeedback("🔥 Correct! 🔥");
+      setFeedback("🔥 Abused Magic! 🔥");
       setCoveredSquares([]);
       setShowPopup(true);
       setSuggestions([]);
     } else {
-      setFeedback("❌ Wrong! Try again.");
+      setFeedback("❌ Uh-Oh Stinky");
       revealMore();
     }
 
@@ -103,7 +103,7 @@ export default function MTGGuessingGame() {
 
   return (
     <div className="game-container">
-      <h1 className="title">MTG Guessing Game</h1>
+      <h1 className="title">Wheely Hard App Trap</h1>
 
       <div className="image-frame">
         {card && (
@@ -128,7 +128,7 @@ export default function MTGGuessingGame() {
           value={guess}
           onChange={handleInputChange}
           onKeyDown={(e) => e.key === "Enter" && handleGuess()}
-          placeholder="Enter your guess..."
+          placeholder="Nyx Weaver"
           className="guess-input"
         />
 
@@ -144,7 +144,7 @@ export default function MTGGuessingGame() {
 
         <button
           className="patreon-button"
-          onClick={() => window.open(PATREON_URL, "_blank")}
+          onClick={() => window.open( https: "//www.patreon.com/c/MercadianBazaars/membership,")}
         >
           ❤️ Support on Patreon
         </button>
