@@ -9,9 +9,65 @@
 
 /* D10 Dice Container (Ensures Proper Left Alignment) */
 .dice-container {
-  width: 150px;
-  height: 150px;
+  width: 200px;
+  height: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Image Frame */
+.image-frame {
+  position: relative;
+  width: 300px;
+  height: 420px;
+  border: 4px solid white;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Card Image */
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Black Covering Squares */
+.cover-square {
+  position: absolute;
+  width: 34%;
+  height: 34%;
+  background-color: black;
+  z-index: 10;
+}
+
+/* Input Field */
+.guess-input {
+  width: 300px;
+  padding: 10px;
+  font-size: 16px;
+  text-align: center;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  outline: none;
+  margin-top: 10px;
+}
+
+/* Patreon Button */
+.patreon-button {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #FF424D;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.patreon-button:hover {
+  background-color: #D73C47;
 }
