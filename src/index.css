@@ -59,6 +59,79 @@ body {
   z-index: 10;
 }
 
+/* Input Field */
+.input-container {
+  position: relative;
+  width: 300px;
+  margin-top: 10px;
+}
+
+.guess-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  text-align: center;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+/* Dropdown Suggestions */
+.suggestions-dropdown {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  width: 100%;
+  background: white;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 20;
+}
+
+.suggestion-item {
+  padding: 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.suggestion-item:hover,
+.suggestion-item.selected {
+  background: #8B4513;
+  color: white;
+}
+
+/* Patreon Button */
+.patreon-button {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #FF424D;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.patreon-button:hover {
+  background-color: #D73C47;
+}
+
+/* Guess Counter */
+.guess-count {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+/* Feedback Text */
+.feedback {
+  margin-top: 10px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
 /* Popup Modal */
 .popup {
   position: fixed;
@@ -92,18 +165,7 @@ body {
   border-radius: 5px;
 }
 
-/* Patreon Button */
-.patreon-button {
-  margin-top: 10px;
-  padding: 10px;
-  background-color: #FF424D;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.patreon-button:hover {
-  background-color: #D73C47;
+.full-card-image {
+  width: 100%;
+  height: auto;
 }
