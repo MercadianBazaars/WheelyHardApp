@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import "./index.css";
 
 const SCRYFALL_API = "https://api.scryfall.com/cards/random?q=set:grn&format=json";
-const SCRYFALL_SEARCH_API = "https://api.scryfall.com/cards/autocomplete?q=";
-const PATREON_URL = "https://www.patreon.com/c/MercadianBazaars"; 
+const PATREON_URL = "https://www.patreon.com/c/MercadianBazaars";
 
 export default function MTGGuessingGame() {
   const [card, setCard] = useState(null);
@@ -94,8 +93,10 @@ export default function MTGGuessingGame() {
         ))}
       </div>
 
-      {/* Animated D10 Counter */}
-      <div className={`d10-counter ${rolling ? "roll" : ""}`}>{guessCount}</div>
+      {/* Animated d10 Counter */}
+      <div className={`dice-container ${rolling ? "roll" : ""}`}>
+        {guessCount}
+      </div>
 
       <button className="patreon-button" onClick={() => window.open(PATREON_URL, "_blank")}>
         ❤️ Support on Patreon
