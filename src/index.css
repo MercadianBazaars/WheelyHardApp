@@ -100,7 +100,7 @@ body {
 .suggestion-item:hover,
 .suggestion-item.selected {
   background: #8B4513;
-  color: white;
+  color: black;
 }
 
 /* Patreon Button */
