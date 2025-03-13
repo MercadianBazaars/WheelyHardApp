@@ -59,22 +59,23 @@ body {
   z-index: 10;
 }
 
-/* Animated D10 Counter */
-.d10-counter {
-  margin-top: 15px;
-  font-size: 22px;
-  font-weight: bold;
-  width: 60px;
-  height: 60px;
+/* Animated D10 Dice Counter */
+.dice-container {
+  margin-top: 20px;
+  width: 70px;
+  height: 70px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: black;
-  color: white;
+  background: black;
   border-radius: 50%;
   border: 3px solid white;
-  font-family: 'Arial', sans-serif;
-  transform: rotate(0deg);
+  font-size: 22px;
+  font-weight: bold;
+  color: white;
+  font-family: "Arial", sans-serif;
+  position: relative;
+  text-align: center;
   transition: transform 0.3s ease-in-out;
 }
 
