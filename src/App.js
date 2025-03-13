@@ -3,7 +3,7 @@ import "./index.css";
 
 const SCRYFALL_API = "https://api.scryfall.com/cards/random?q=set:grn&format=json";
 const SCRYFALL_SEARCH_API = "https://api.scryfall.com/cards/autocomplete?q=";
-const PATREON_URL = "https://www.patreon.com/c/MercadianBazaars/membership"; // Your correct Patreon link
+const PATREON_URL = "https://www.patreon.com/c/MercadianBazaars/membership"; 
 
 export default function MTGGuessingGame() {
   const [card, setCard] = useState(null);
@@ -42,12 +42,12 @@ export default function MTGGuessingGame() {
     if (!card) return;
 
     if (guess.toLowerCase().trim() === card.name.toLowerCase().trim()) {
-      setFeedback("🔥 Abused Magic 🔥");
+      setFeedback("🔥 Correct! 🔥");
       setCoveredSquares([]);
       setShowPopup(true);
       setSuggestions([]);
     } else {
-      setFeedback("❌ Uh-Oh Stinky");
+      setFeedback("❌ Wrong! Try again.");
       revealMore();
     }
 
@@ -70,7 +70,6 @@ export default function MTGGuessingGame() {
     }
   };
 
-  // FIXED: Properly Fetch and Display Autocomplete Suggestions
   const fetchSuggestions = async (query) => {
     if (query.length < 2) {
       setSuggestions([]);
@@ -106,7 +105,7 @@ export default function MTGGuessingGame() {
 
   return (
     <div className="game-container">
-      <h1 className="title">Wheely Hard App</h1>
+      <h1 className="title">MTG Guessing Game</h1>
 
       <div className="image-frame">
         {card && (
@@ -135,7 +134,6 @@ export default function MTGGuessingGame() {
           className="guess-input"
         />
 
-        {/* FIXED: Autocomplete Suggestions Dropdown */}
         {suggestions.length > 0 && (
           <div className="suggestions-dropdown">
             {suggestions.map((name, index) => (
@@ -145,14 +143,14 @@ export default function MTGGuessingGame() {
             ))}
           </div>
         )}
-
-        <button
-          className="patreon-button"
-          onClick={() => window.open(PATREON_URL, "_blank")}
-        >
-          ❤️ Support on Patreon
-        </button>
       </div>
+
+      <button
+        className="patreon-button"
+        onClick={() => window.open(PATREON_URL, "_blank")}
+      >
+        ❤️ Support on Patreon
+      </button>
 
       <p className="guess-count">Incorrect Guesses: {guessCount}</p>
 
