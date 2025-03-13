@@ -12,6 +12,7 @@ export default function MTGGuessingGame() {
   const [feedback, setFeedback] = useState("");
   const [guessCount, setGuessCount] = useState(10);
   const [showPopup, setShowPopup] = useState(false);
+  const [incorrectGuesses, setIncorrectGuesses] = useState([]); // Stores incorrect guesses
 
   useEffect(() => {
     fetchCard();
@@ -28,6 +29,7 @@ export default function MTGGuessingGame() {
       setGuess("");
       setFeedback("");
       setGuessCount(10);
+      setIncorrectGuesses([]); // Reset incorrect guesses on new card
       setShowPopup(false);
     } catch (error) {
       console.error("Error fetching card:", error);
@@ -44,6 +46,7 @@ export default function MTGGuessingGame() {
       setShowPopup(true);
     } else {
       setFeedback("❌ Uh-Oh Stinky");
+      setIncorrectGuesses((prev) => [...prev, guess]); // Store incorrect guess
       revealMore();
     }
 
@@ -74,7 +77,7 @@ export default function MTGGuessingGame() {
     <div className="game-container">
       <h1 className="title">Wheely Hard</h1>
 
-      {/* Layout with Dice on the Left & Image in the Center */}
+      {/* Layout: Dice on the Left, Image in the Center, Table on the Right */}
       <div className="game-content">
         {/* 3D DICE ON THE LEFT */}
         <div className="dice-container">
@@ -92,6 +95,18 @@ export default function MTGGuessingGame() {
               left: `${(index % 3) * 33.33}%`
             }}></div>
           ))}
+        </div>
+
+        {/* INCORRECT GUESSES TABLE ON THE RIGHT */}
+        <div className="guess-table">
+          <h2>❌ Incorrect Guesses</h2>
+          <ul>
+            {incorrectGuesses.length === 0 ? (
+              <li>No incorrect guesses yet</li>
+            ) : (
+              incorrectGuesses.map((word, index) => <li key={index}>{word}</li>)
+            )}
+          </ul>
         </div>
       </div>
 
