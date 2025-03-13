@@ -1,15 +1,20 @@
-/* General Layout */
-body {
+/* Global Reset */
+* {
   margin: 0;
-  background-color: #8B4513;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Page Background */
+body {
+  background-color: #8B4513; /* Copper/Brown Background */
   font-family: Arial, sans-serif;
   color: white;
-  text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100vh;
-  overflow: hidden;
+  text-align: center;
 }
 
 /* Main Game Container */
@@ -20,7 +25,7 @@ body {
 }
 
 /* Title */
-.title {
+h1 {
   font-size: 24px;
   margin-bottom: 20px;
 }
@@ -42,6 +47,7 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
 /* Black Blocks Covering the Image */
@@ -53,19 +59,28 @@ body {
   z-index: 10;
 }
 
-/* Patreon Button */
-.patreon-button {
-  margin-top: 10px;
+/* Input Field */
+input {
+  margin-top: 20px;
   padding: 10px;
-  font-size: 14px;
-  background-color: #FF424D;
-  color: white;
-  border: none;
+  font-size: 16px;
+  width: 200px;
+  text-align: center;
   border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
+  border: none;
+  outline: none;
+  color: black;
 }
 
-.patreon-button:hover {
-  background-color: #D73C47;
+/* Incorrect Guess Counter */
+p {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+/* Feedback Text */
+.feedback {
+  margin-top: 10px;
+  font-size: 18px;
+  font-weight: bold;
 }
