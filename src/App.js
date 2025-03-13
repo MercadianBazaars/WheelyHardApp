@@ -11,9 +11,8 @@ export default function MTGGuessingGame() {
   const [guess, setGuess] = useState("");
   const [feedback, setFeedback] = useState("");
   const [guessCount, setGuessCount] = useState(10);
-  const [suggestions, setSuggestions] = useState([]);
+  const [rolling, setRolling] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
-  const inputRef = useRef(null);
 
   useEffect(() => {
     fetchCard();
@@ -30,7 +29,6 @@ export default function MTGGuessingGame() {
       setGuess("");
       setFeedback("");
       setGuessCount(10);
-      setSuggestions([]);
       setShowPopup(false);
     } catch (error) {
       console.error("Error fetching card:", error);
@@ -45,7 +43,6 @@ export default function MTGGuessingGame() {
       setFeedback("🔥 Magic Abused! 🔥");
       setCoveredSquares([]);
       setShowPopup(true);
-      setSuggestions([]);
     } else {
       setFeedback("❌ Uh-Oh Stinky");
       revealMore();
@@ -62,7 +59,13 @@ export default function MTGGuessingGame() {
       } while (!coveredSquares.includes(newPiece));
 
       setCoveredSquares(coveredSquares.filter((piece) => piece !== newPiece));
-      setGuessCount(guessCount - 1);
+
+      // Animate the d10 rolling effect
+      setRolling(true);
+      setTimeout(() => {
+        setGuessCount((prev) => prev - 1);
+        setRolling(false);
+      }, 300);
 
       if (guessCount - 1 === 1) {
         setShowPopup(true);
@@ -91,7 +94,8 @@ export default function MTGGuessingGame() {
         ))}
       </div>
 
-      <div className="d10-counter">{guessCount}</div>
+      {/* Animated D10 Counter */}
+      <div className={`d10-counter ${rolling ? "roll" : ""}`}>{guessCount}</div>
 
       <button className="patreon-button" onClick={() => window.open(PATREON_URL, "_blank")}>
         ❤️ Support on Patreon
