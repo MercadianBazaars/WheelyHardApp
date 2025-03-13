@@ -1,151 +1,17 @@
-/* Global Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-/* Background */
-body {
-  background-color: #8B4513;
-  font-family: Arial, sans-serif;
-  color: white;
-  text-align: center;
+/* Game Layout (Image + Dice Side by Side) */
+.game-content {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;
-  overflow: hidden;
-}
-
-/* Game Container */
-.game-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* Title */
-.title {
-  font-size: 24px;
-  margin-bottom: 20px;
-}
-
-/* Image Frame */
-.image-frame {
-  position: relative;
-  width: 300px;
-  height: 420px;
-  border: 4px solid white;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Card Image */
-.card-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* Black Covering Squares */
-.cover-square {
-  position: absolute;
-  width: 34%;
-  height: 34%;
-  background-color: black;
-  z-index: 10;
-}
-
-/* Animated D10 Dice Counter */
-.dice-container {
+  gap: 20px; /* Space between dice and image */
   margin-top: 20px;
-  width: 80px;
-  height: 80px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: blue;
-  color: black;
-  font-size: 30px;
-  font-weight: bold;
-  font-family: "Arial", sans-serif;
-  text-align: center;
-  position: relative;
-  transition: transform 0.3s ease-in-out;
-  clip-path: polygon(
-    50% 0%, 
-    100% 25%, 
-    100% 75%, 
-    50% 100%, 
-    0% 75%, 
-    0% 25%
-  ); /* Hard D10 Shape */
-  border: 3px solid green;
 }
 
-.roll {
-  transform: rotate(360deg);
-}
-
-/* Patreon Button */
-.patreon-button {
-  margin-top: 10px;
-  padding: 10px;
-  background-color: #FF424D;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.patreon-button:hover {
-  background-color: #D73C47;
-}
-
-/* Popup Modal */
-.popup {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.popup-content {
-  position: relative;
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-}
-
-.close-btn {
-  position: absolute;
-  top: 5px;
-  right: 10px;
-  background: red;
-  color: white;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  padding: 5px;
-  border-radius: 5px;
-}
-
-.full-card-image {
-  width: 100%;
-  height: auto;
-}
-/* Dice Styling */
+/* D10 Dice Container (Ensures Proper Left Alignment) */
 .dice-container {
   width: 150px;
   height: 150px;
-  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
