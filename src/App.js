@@ -76,7 +76,7 @@ export default function MTGGuessingGame() {
     <div className="game-container">
       <h1 className="title">Wheely Hard</h1>
 
-      {/* Layout: Image in the Center, Table on the Right */}
+      {/* Container for Image + Table */}
       <div className="game-content">
         {/* IMAGE IN THE CENTER */}
         <div className="image-frame">
