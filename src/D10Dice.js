@@ -1,14 +1,15 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { a, useSpring } from "@react-spring/three";
+import { useSpring, a } from "@react-spring/three";
+import { IcosahedronGeometry } from "three";
 
 function D10({ number }) {
   const meshRef = useRef();
 
-  // Rotates the dice whenever the number changes (simulating a roll)
+  // Rotate the dice when the number changes (simulating a roll)
   const { rotation } = useSpring({
     rotation: [Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI],
-    config: { mass: 1, tension: 170, friction: 20 },
+    config: { mass: 1, tension: 180, friction: 12 },
   });
 
   return (
