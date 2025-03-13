@@ -1,27 +1,53 @@
-/* Game Layout (Image + Table Side by Side) */
+/* Ensures game elements align properly */
+.game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: #8B4513;
+  color: white;
+}
+
+/* Positions the game elements side-by-side */
 .game-content {
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  gap: 30px; /* Space between image and table */
+  gap: 40px; /* Space between image and table */
   margin-top: 20px;
 }
 
-/* Incorrect Guesses Table (Right Side) */
+/* Image Frame */
+.image-frame {
+  position: relative;
+  width: 300px;
+  height: 420px;
+  border: 4px solid white;
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Table for Incorrect Guesses */
 .guess-table {
   width: 250px;
-  padding: 10px;
   background: white;
   color: black;
   border-radius: 8px;
   border: 2px solid black;
   text-align: left;
+  padding: 10px;
 }
 
 .guess-table h2 {
   font-size: 18px;
   text-align: center;
   margin-bottom: 10px;
+  color: black;
 }
 
 .guess-table ul {
