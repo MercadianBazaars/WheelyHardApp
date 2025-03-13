@@ -3,7 +3,7 @@ import "./index.css";
 
 const SCRYFALL_API = "https://api.scryfall.com/cards/random?q=set:grn&format=json";
 const SCRYFALL_SEARCH_API = "https://api.scryfall.com/cards/autocomplete?q=";
-const PATREON_URL = "https://www.patreon.com/yourpatreon"; // Replace with your actual Patreon link
+const PATREON_URL = "https://www.patreon.com/c/MercadianBazaars/membership"; // Your correct Patreon link
 
 export default function MTGGuessingGame() {
   const [card, setCard] = useState(null);
@@ -42,7 +42,7 @@ export default function MTGGuessingGame() {
     if (!card) return;
 
     if (guess.toLowerCase().trim() === card.name.toLowerCase().trim()) {
-      setFeedback("🔥 Abused Magic! 🔥");
+      setFeedback("🔥 Abused Magic 🔥");
       setCoveredSquares([]);
       setShowPopup(true);
       setSuggestions([]);
@@ -70,6 +70,7 @@ export default function MTGGuessingGame() {
     }
   };
 
+  // FIXED: Properly Fetch and Display Autocomplete Suggestions
   const fetchSuggestions = async (query) => {
     if (query.length < 2) {
       setSuggestions([]);
@@ -78,7 +79,9 @@ export default function MTGGuessingGame() {
 
     try {
       const response = await fetch(`${SCRYFALL_SEARCH_API}${query}`);
+      if (!response.ok) throw new Error("Failed to fetch suggestions");
       const data = await response.json();
+
       setSuggestions(data.data || []);
     } catch (error) {
       console.error("Error fetching suggestions:", error);
@@ -103,7 +106,7 @@ export default function MTGGuessingGame() {
 
   return (
     <div className="game-container">
-      <h1 className="title">Wheely Hard App Trap</h1>
+      <h1 className="title">Wheely Hard App</h1>
 
       <div className="image-frame">
         {card && (
@@ -128,10 +131,11 @@ export default function MTGGuessingGame() {
           value={guess}
           onChange={handleInputChange}
           onKeyDown={(e) => e.key === "Enter" && handleGuess()}
-          placeholder="Nyx Weaver"
+          placeholder="Enter your guess..."
           className="guess-input"
         />
 
+        {/* FIXED: Autocomplete Suggestions Dropdown */}
         {suggestions.length > 0 && (
           <div className="suggestions-dropdown">
             {suggestions.map((name, index) => (
@@ -144,7 +148,7 @@ export default function MTGGuessingGame() {
 
         <button
           className="patreon-button"
-          onClick={() => window.open( https: "//www.patreon.com/c/MercadianBazaars/membership,")}
+          onClick={() => window.open(PATREON_URL, "_blank")}
         >
           ❤️ Support on Patreon
         </button>
