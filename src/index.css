@@ -79,7 +79,7 @@ input {
   padding: 10px;
   cursor: pointer;
   color: black; /* Ensures text is BLACK */
-  background-color: white; /* Ensures WHITE BG */
+  background-color: black; /* Ensures WHITE BG */
   border-bottom: 1px solid #eee;
 }
 
