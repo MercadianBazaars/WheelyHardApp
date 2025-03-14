@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from "react";
+import "./index.css";
+import D10Dice from "./D10Dice"; // Import the 3D d10 dice component
 
 const SCRYFALL_API = "https://api.scryfall.com/cards/random?q=set:grn&format=json";
+const PATREON_URL = "https://www.patreon.com/c/MercadianBazaars";
 
 export default function MTGGuessingGame() {
   const [card, setCard] = useState(null);
   const [coveredSquares, setCoveredSquares] = useState([]);
   const [guess, setGuess] = useState("");
   const [feedback, setFeedback] = useState("");
-  const [guessCount, setGuessCount] = useState(0);
+  const [guessCount, setGuessCount] = useState(10);
+  const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
     fetchCard();
@@ -20,11 +24,11 @@ export default function MTGGuessingGame() {
       const data = await response.json();
 
       setCard(data);
-      setCoveredSquares(Array.from({ length: 9 }, (_, i) => i)); // Fully cover the image
-
+      setCoveredSquares(Array.from({ length: 9 }, (_, i) => i));
       setGuess("");
       setFeedback("");
-      setGuessCount(0);
+      setGuessCount(10);
+      setShowPopup(false);
     } catch (error) {
       console.error("Error fetching card:", error);
       setFeedback("Error loading card. Try again.");
@@ -36,7 +40,8 @@ export default function MTGGuessingGame() {
 
     if (guess.toLowerCase().trim() === card.name.toLowerCase().trim()) {
       setFeedback("🔥 Magic Abused! 🔥");
-      setCoveredSquares([]); // Reveal image
+      setCoveredSquares([]);
+      setShowPopup(true);
     } else {
       setFeedback("❌ Uh-Oh Stinky");
       revealMore();
@@ -53,85 +58,65 @@ export default function MTGGuessingGame() {
       } while (!coveredSquares.includes(newPiece));
 
       setCoveredSquares(coveredSquares.filter((piece) => piece !== newPiece));
-      setGuessCount(guessCount + 1);
+      setGuessCount((prev) => Math.max(prev - 1, 0));
+
+      if (guessCount - 1 === 1) {
+        setShowPopup(true);
+      }
     }
   };
 
+  const closePopup = () => {
+    window.location.reload();
+  };
+
   return (
-    <div style={{
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-      width: "100vw",
-      height: "100vh",
-      backgroundColor: "#8B4513",
-      color: "white"
-    }}>
-      <h1 style={{ fontSize: "24px", marginBottom: "20px" }}>Wheely Hard</h1>
+    <div className="game-container">
+      <h1 className="title">Wheely Hard</h1>
 
-      {/* IMAGE CONTAINER WITH PERFECT FIT */}
-      <div style={{
-        position: "relative",
-        width: "300px",
-        height: "420px",
-        border: "4px solid white",
-        boxSizing: "border-box",  // Ensures image fits inside the border
-        overflow: "hidden",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center"
-      }}>
-        {card && (
-          <img
-            src={card.image_uris?.art_crop}
-            alt="Magic Card Art"
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",  // Ensures perfect fit without stretching
-              display: "block"
-            }}
-          />
-        )}
+      {/* Layout with Dice on the Left & Image in the Center */}
+      <div className="game-content">
+        {/* 3D DICE ON THE LEFT */}
+        <div className="dice-container">
+          <D10Dice guessCount={guessCount} />
+        </div>
 
-        {/* BLACK BLOCKS THAT HIDE THE IMAGE */}
-        {coveredSquares.map((index) => (
-          <div
-            key={index}
-            style={{
-              position: "absolute",
+        {/* IMAGE IN THE CENTER */}
+        <div className="image-frame">
+          {card && (
+            <img src={card.image_uris?.art_crop} alt="Magic Card Art" className="card-image" />
+          )}
+          {coveredSquares.map((index) => (
+            <div key={index} className="cover-square" style={{
               top: `${Math.floor(index / 3) * 33.33}%`,
-              left: `${(index % 3) * 33.33}%`,
-              width: "34%",  // Slightly oversized to remove any gaps
-              height: "34%",
-              backgroundColor: "black",
-              zIndex: 10
-            }}
-          ></div>
-        ))}
+              left: `${(index % 3) * 33.33}%`
+            }}></div>
+          ))}
+        </div>
       </div>
 
-      {/* INPUT FIELD */}
+      {/* Guess Input */}
       <input
         type="text"
         value={guess}
         onChange={(e) => setGuess(e.target.value)}
         onKeyDown={(e) => e.key === "Enter" && handleGuess()}
-        placeholder="Is it Nyx Weaver..."
-        style={{
-          marginTop: "20px",
-          padding: "10px",
-          fontSize: "16px",
-          width: "200px",
-          textAlign: "center",
-          borderRadius: "5px"
-        }}
+        placeholder="Enter your guess..."
+        className="guess-input"
       />
 
-      <p style={{ marginTop: "10px", fontSize: "14px" }}>Incorrect Guesses: {guessCount}</p>
+      <button className="patreon-button" onClick={() => window.open(PATREON_URL, "_blank")}>
+        ❤️ Support on Patreon
+      </button>
 
-      {feedback && <p style={{ marginTop: "10px", fontSize: "18px", fontWeight: "bold" }}>{feedback}</p>}
+      {showPopup && card && (
+        <div className="popup">
+          <div className="popup-content">
+            <button className="close-btn" onClick={closePopup}>✖</button>
+            <img src={card.image_uris?.normal} alt="Full Card" className="full-card-image" />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
