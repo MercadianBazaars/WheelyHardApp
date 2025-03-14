@@ -11,7 +11,7 @@ export default function MTGGuessingGame() {
   const [feedback, setFeedback] = useState("");
   const [guessCount, setGuessCount] = useState(10);
   const [suggestions, setSuggestions] = useState([]);
-  const [guessHistory, setGuessHistory] = useState([]); // Tracks past guesses
+  const [guessHistory, setGuessHistory] = useState([]);
 
   useEffect(() => {
     fetchCard();
@@ -24,7 +24,7 @@ export default function MTGGuessingGame() {
       const data = await response.json();
 
       setCard(data);
-      setCoveredSquares(Array.from({ length: 9 }, (_, i) => i)); // Fully cover the image
+      setCoveredSquares(Array.from({ length: 9 }, (_, i) => i));
       setGuess("");
       setFeedback("");
       setGuessCount(10);
@@ -71,16 +71,16 @@ export default function MTGGuessingGame() {
 
     if (guess.trim().toLowerCase() === card.name.toLowerCase()) {
       setFeedback("🔥 Magic Abused! 🔥");
-      setCoveredSquares([]); // Reveal image
+      setCoveredSquares([]);
       hint = "✅ Correct";
     } else {
       const guessedDate = new Date(guessedCard.released_at);
       const actualDate = new Date(card.released_at);
 
       if (guessedDate > actualDate) {
-        hint = "Older ⬅️";
+        hint = "⬅️ Older";
       } else if (guessedDate < actualDate) {
-        hint = "Newer ➡️";
+        hint = "➡️ Newer";
       } else {
         hint = "🤷 Unknown";
       }
@@ -113,13 +113,14 @@ export default function MTGGuessingGame() {
       width: "100vw",
       height: "100vh",
       backgroundColor: "#8B4513",
-      color: "white"
+      color: "white",
+      padding: "20px"
     }}>
-      {/* MAIN GAME CONTAINER */}
+      {/* GAME AREA */}
       <div style={{ textAlign: "center", marginRight: "40px" }}>
         <h1>Wheely Hard</h1>
 
-        {/* IMAGE CONTAINER */}
+        {/* IMAGE BOX */}
         <div style={{
           position: "relative",
           width: "300px",
@@ -143,7 +144,7 @@ export default function MTGGuessingGame() {
             />
           )}
 
-          {/* BLACK COVER SQUARES */}
+          {/* BLACK COVER BLOCKS */}
           {coveredSquares.map((index) => (
             <div
               key={index}
@@ -180,7 +181,7 @@ export default function MTGGuessingGame() {
             }}
           />
 
-          {/* Dropdown Suggestions */}
+          {/* Suggestions */}
           {suggestions.length > 0 && (
             <div style={{
               position: "absolute",
@@ -220,23 +221,33 @@ export default function MTGGuessingGame() {
         </div>
       </div>
 
-      {/* TABLE FOR GUESS TRACKING */}
-      <table style={{ border: "1px solid white", color: "black", backgroundColor: "white", width: "200px" }}>
-        <thead>
-          <tr>
-            <th>Guess</th>
-            <th>Hint</th>
-          </tr>
-        </thead>
-        <tbody>
-          {guessHistory.map((entry, index) => (
-            <tr key={index}>
-              <td style={{ textDecoration: "underline", color: "red" }}>{entry.name}</td>
-              <td>{entry.hint}</td>
+      {/* GUESS TRACKING TABLE */}
+      <div style={{ marginLeft: "40px" }}>
+        <table style={{
+          border: "2px solid white",
+          color: "black",
+          backgroundColor: "white",
+          width: "250px",
+          textAlign: "center",
+          padding: "10px",
+          borderRadius: "5px"
+        }}>
+          <thead>
+            <tr>
+              <th>Guess</th>
+              <th>Hint</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {guessHistory.map((entry, index) => (
+              <tr key={index}>
+                <td style={{ textDecoration: "underline", color: "red" }}>{entry.name}</td>
+                <td>{entry.hint}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
