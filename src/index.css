@@ -75,7 +75,7 @@ h1 {
   top: 100%;
   left: 0;
   width: 100%;
-  background-color: white !important;  /* White background */
+  background-color: black !important;  /* White background */
   border: 2px solid gray;
   border-radius: 4px;
   max-height: 200px;
