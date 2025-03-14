@@ -1,29 +1,33 @@
-/* GLOBAL STYLES */
-* {
+/* General Styles */
+body, html {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
-}
-
-body {
-  background-color: #8B4513; /* Dark brown background */
-  color: white;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  text-align: center;
-  overflow: hidden;
+  background-color: #8B4513; /* Brown Background */
+  font-family: Arial, sans-serif;
+  color: white;
 }
 
-/* GAME TITLE */
-h1 {
-  font-size: 28px;
+/* Main Container */
+.container {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Title */
+.title {
+  font-size: 24px;
+  font-weight: bold;
   margin-bottom: 20px;
 }
 
-/* IMAGE CONTAINER */
+/* Card Image Box */
 .image-container {
   position: relative;
   width: 300px;
@@ -35,51 +39,32 @@ h1 {
   justify-content: center;
 }
 
-/* BLACK BLOCKS HIDING THE IMAGE */
+/* Card Image */
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Black Covering Squares */
 .cover-square {
   position: absolute;
-  width: 34%;
-  height: 34%;
   background-color: black;
-  z-index: 10;
 }
 
-/* INPUT FIELD */
-input[type="text"] {
-  width: 220px;
+/* Input Field */
+.input-field {
+  margin-top: 20px;
   padding: 10px;
   font-size: 16px;
-  border-radius: 5px;
-  border: 1px solid gray;
-  text-align: center;
-  margin-top: 15px;
-}
-
-/* DROP-DOWN MENU FOR SUGGESTIONS */
-.dropdown {
-  position: absolute;
   width: 220px;
-  background-color: white;
-  border: 1px solid black;
+  text-align: center;
   border-radius: 5px;
-  z-index: 100;
-  text-align: left;
-  margin-top: 2px;
+  border: 2px solid white;
 }
 
-.suggestion-item {
-  padding: 10px;
-  cursor: pointer;
-  border-bottom: 1px solid gray;
-  color: black;
-  background-color: white;
-}
-
-.suggestion-item:hover {
-  background-color: lightgray;
-}
-
-/* PATREON BUTTON */
+/* Patreon Button */
 .patreon-button {
   margin-top: 10px;
   background-color: #FF424D;
@@ -89,20 +74,20 @@ input[type="text"] {
   border-radius: 5px;
   font-size: 16px;
   cursor: pointer;
-  transition: 0.3s;
+  transition: background 0.3s ease-in-out;
 }
 
 .patreon-button:hover {
-  background-color: #d83841;
+  background-color: #D83A42;
 }
 
-/* GUESS COUNTER */
+/* Guess Counter */
 .guess-counter {
   margin-top: 10px;
   font-size: 14px;
 }
 
-/* FEEDBACK MESSAGE */
+/* Feedback Message */
 .feedback {
   margin-top: 10px;
   font-size: 18px;
@@ -111,43 +96,81 @@ input[type="text"] {
   transition: opacity 1s ease-in-out;
 }
 
-/* POP-UP FULL CARD */
-.popup-overlay {
-  position: fixed;
-  top: 0;
+/* Drop-down Suggestions Box */
+.suggestions-container {
+  position: absolute;
+  top: 100%;
   left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 100%;
+  background-color: white;
+  border: 2px solid gray;
+  border-radius: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 100;
 }
 
-.popup {
-  position: relative;
+/* Individual Suggestion Item */
+.suggestion-item {
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid gray;
+  font-size: 16px;
+  color: black !important;  /* Ensure text is readable */
+  background-color: white !important;  /* Ensure contrast */
+  transition: background 0.2s;
+}
+
+.suggestion-item:hover {
+  background-color: #f0f0f0; /* Light gray on hover */
+}
+
+/* Hidden Class */
+.hidden {
+  display: none;
+}
+
+/* Table for Tracking Incorrect Guesses */
+.wrong-guess-table {
+  margin-top: 20px;
+  border-collapse: collapse;
+  width: 250px;
   background-color: white;
-  padding: 20px;
-  border-radius: 10px;
+  border: 2px solid black;
+}
+
+.wrong-guess-table th, .wrong-guess-table td {
+  border: 1px solid black;
+  padding: 8px;
   text-align: center;
 }
 
-.full-card-image {
-  width: 300px;
-  border-radius: 5px;
+.wrong-guess-table th {
+  background-color: black;
+  color: white;
 }
 
-/* CLOSE BUTTON FOR POPUP */
-.close-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
+.wrong-guess-table td {
+  color: black;
+  font-weight: bold;
+  text-decoration: underline;
 }
 
-.close-button:hover {
-  color: red;
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.fade-out {
+  animation: fadeOut 2s forwards;
+}
+
+.fade-in {
+  animation: fadeIn 1s forwards;
 }
