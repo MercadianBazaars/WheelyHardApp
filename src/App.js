@@ -7,7 +7,7 @@ export default function MTGGuessingGame() {
   const [coveredSquares, setCoveredSquares] = useState([]);
   const [guess, setGuess] = useState("");
   const [feedback, setFeedback] = useState("");
-  const [guessCount, setGuessCount] = useState(10); // Starts at 10, decreases with each wrong guess
+  const [guessCount, setGuessCount] = useState(0);
 
   useEffect(() => {
     fetchCard();
@@ -21,9 +21,10 @@ export default function MTGGuessingGame() {
 
       setCard(data);
       setCoveredSquares(Array.from({ length: 9 }, (_, i) => i)); // Fully cover the image
+
       setGuess("");
       setFeedback("");
-      setGuessCount(10);
+      setGuessCount(0);
     } catch (error) {
       console.error("Error fetching card:", error);
       setFeedback("Error loading card. Try again.");
@@ -39,12 +40,6 @@ export default function MTGGuessingGame() {
     } else {
       setFeedback("❌ Uh-Oh Stinky");
       revealMore();
-      setGuessCount((prevCount) => prevCount - 1); // Reduce guess count
-
-      // Automatically remove feedback after 2 seconds
-      setTimeout(() => {
-        setFeedback("");
-      }, 2000);
     }
 
     setGuess("");
@@ -58,26 +53,62 @@ export default function MTGGuessingGame() {
       } while (!coveredSquares.includes(newPiece));
 
       setCoveredSquares(coveredSquares.filter((piece) => piece !== newPiece));
+      setGuessCount(guessCount + 1);
     }
   };
 
   return (
-    <div style={styles.container}>
-      <h1 style={styles.title}>Wheely Hard</h1>
+    <div style={{
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      width: "100vw",
+      height: "100vh",
+      backgroundColor: "#8B4513",
+      color: "white"
+    }}>
+      <h1 style={{ fontSize: "24px", marginBottom: "20px" }}>Wheely Hard</h1>
 
       {/* IMAGE CONTAINER WITH PERFECT FIT */}
-      <div style={styles.imageContainer}>
+      <div style={{
+        position: "relative",
+        width: "300px",
+        height: "420px",
+        border: "4px solid white",
+        boxSizing: "border-box",  // Ensures image fits inside the border
+        overflow: "hidden",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center"
+      }}>
         {card && (
           <img
             src={card.image_uris?.art_crop}
             alt="Magic Card Art"
-            style={styles.cardImage}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",  // Ensures perfect fit without stretching
+              display: "block"
+            }}
           />
         )}
 
         {/* BLACK BLOCKS THAT HIDE THE IMAGE */}
         {coveredSquares.map((index) => (
-          <div key={index} style={{ ...styles.coverSquare, ...getSquarePosition(index) }}></div>
+          <div
+            key={index}
+            style={{
+              position: "absolute",
+              top: `${Math.floor(index / 3) * 33.33}%`,
+              left: `${(index % 3) * 33.33}%`,
+              width: "34%",  // Slightly oversized to remove any gaps
+              height: "34%",
+              backgroundColor: "black",
+              zIndex: 10
+            }}
+          ></div>
         ))}
       </div>
 
@@ -88,102 +119,19 @@ export default function MTGGuessingGame() {
         onChange={(e) => setGuess(e.target.value)}
         onKeyDown={(e) => e.key === "Enter" && handleGuess()}
         placeholder="Is it Nyx Weaver..."
-        style={styles.inputField}
+        style={{
+          marginTop: "20px",
+          padding: "10px",
+          fontSize: "16px",
+          width: "200px",
+          textAlign: "center",
+          borderRadius: "5px"
+        }}
       />
 
-      {/* PATREON BUTTON */}
-      <a href="https://www.patreon.com/c/MercadianBazaars" target="_blank" rel="noopener noreferrer">
-        <button style={styles.patreonButton}>❤️ Support on Patreon</button>
-      </a>
+      <p style={{ marginTop: "10px", fontSize: "14px" }}>Incorrect Guesses: {guessCount}</p>
 
-      {/* GUESS COUNTER */}
-      <p style={styles.guessCounter}>Guesses Remaining: {guessCount}</p>
-
-      {/* FEEDBACK MESSAGE */}
-      <p className={`feedback ${feedback ? "" : "hidden"}`} style={styles.feedback}>
-        {feedback}
-      </p>
+      {feedback && <p style={{ marginTop: "10px", fontSize: "18px", fontWeight: "bold" }}>{feedback}</p>}
     </div>
   );
 }
-
-// FUNCTION TO POSITION BLACK SQUARES
-const getSquarePosition = (index) => ({
-  position: "absolute",
-  top: `${Math.floor(index / 3) * 33.33}%`,
-  left: `${(index % 3) * 33.33}%`,
-  width: "34%",
-  height: "34%",
-  backgroundColor: "black",
-  zIndex: 10,
-});
-
-// CSS-IN-JS STYLES
-const styles = {
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    width: "100vw",
-    height: "100vh",
-    backgroundColor: "#8B4513",
-    color: "white",
-  },
-  title: {
-    fontSize: "24px",
-    marginBottom: "20px",
-  },
-  imageContainer: {
-    position: "relative",
-    width: "300px",
-    height: "420px",
-    border: "4px solid white",
-    boxSizing: "border-box",
-    overflow: "hidden",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  cardImage: {
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-    display: "block",
-  },
-  coverSquare: {
-    position: "absolute",
-  },
-  inputField: {
-    marginTop: "20px",
-    padding: "10px",
-    fontSize: "16px",
-    width: "200px",
-    textAlign: "center",
-    borderRadius: "5px",
-  },
-  patreonButton: {
-    marginTop: "10px",
-    backgroundColor: "#FF424D",
-    color: "white",
-    padding: "10px",
-    border: "none",
-    borderRadius: "5px",
-    fontSize: "16px",
-    cursor: "pointer",
-    transition: "0.3s",
-  },
-  guessCounter: {
-    marginTop: "10px",
-    fontSize: "14px",
-  },
-  feedback: {
-    marginTop: "10px",
-    fontSize: "18px",
-    fontWeight: "bold",
-    opacity: 1,
-    transition: "opacity 1s ease-in-out",
-  },
-};
-
-export default MTGGuessingGame;
