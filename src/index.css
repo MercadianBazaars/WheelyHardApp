@@ -1,3 +1,81 @@
+/* Global Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Background */
+body {
+  background-color: #8B4513;
+  font-family: Arial, sans-serif;
+  color: white;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Game Container */
+.game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Title */
+.title {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* Image Frame */
+.image-frame {
+  position: relative;
+  width: 300px;
+  height: 420px;
+  border: 4px solid white;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Card Image */
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Black Covering Squares */
+.cover-square {
+  position: absolute;
+  width: 34%;
+  height: 34%;
+  background-color: black;
+  z-index: 10;
+}
+
+/* Input Field */
+.input-container {
+  position: relative;
+  width: 300px;
+  margin-top: 10px;
+}
+
+.guess-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  text-align: center;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
 /* Dropdown Suggestions */
 .suggestions-dropdown {
   position: absolute;
@@ -23,4 +101,71 @@
 .suggestion-item.selected {
   background: #8B4513;
   color: white;
+}
+
+/* Patreon Button */
+.patreon-button {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #FF424D;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.patreon-button:hover {
+  background-color: #D73C47;
+}
+
+/* Guess Counter */
+.guess-count {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+/* Feedback Text */
+.feedback {
+  margin-top: 10px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* Popup Modal */
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.popup-content {
+  position: relative;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.close-btn {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  background: red;
+  color: white;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.full-card-image {
+  width: 100%;
+  height: auto;
 }
