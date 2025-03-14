@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
-import "./index.css";
-import D10Dice from "./D10Dice"; // Import the 3D d10 dice component
 
 const SCRYFALL_API = "https://api.scryfall.com/cards/random?q=set:grn&format=json";
-const PATREON_URL = "https://www.patreon.com/c/MercadianBazaars";
 
 export default function MTGGuessingGame() {
   const [card, setCard] = useState(null);
@@ -24,7 +21,7 @@ export default function MTGGuessingGame() {
       const data = await response.json();
 
       setCard(data);
-      setCoveredSquares(Array.from({ length: 9 }, (_, i) => i));
+      setCoveredSquares(Array.from({ length: 9 }, (_, i) => i)); // Fully cover the image
       setGuess("");
       setFeedback("");
       setGuessCount(10);
@@ -40,11 +37,17 @@ export default function MTGGuessingGame() {
 
     if (guess.toLowerCase().trim() === card.name.toLowerCase().trim()) {
       setFeedback("🔥 Magic Abused! 🔥");
-      setCoveredSquares([]);
+      setCoveredSquares([]); // Reveal image
       setShowPopup(true);
     } else {
       setFeedback("❌ Uh-Oh Stinky");
       revealMore();
+      setGuessCount((prevCount) => prevCount - 1); // Reduce guess count
+
+      // Automatically remove feedback after 2 seconds
+      setTimeout(() => {
+        setFeedback("");
+      }, 2000);
     }
 
     setGuess("");
@@ -58,65 +61,175 @@ export default function MTGGuessingGame() {
       } while (!coveredSquares.includes(newPiece));
 
       setCoveredSquares(coveredSquares.filter((piece) => piece !== newPiece));
-      setGuessCount((prev) => Math.max(prev - 1, 0));
+    }
 
-      if (guessCount - 1 === 1) {
-        setShowPopup(true);
-      }
+    if (coveredSquares.length === 1) {
+      setShowPopup(true);
     }
   };
 
-  const closePopup = () => {
-    window.location.reload();
-  };
-
   return (
-    <div className="game-container">
-      <h1 className="title">Wheely Hard</h1>
+    <div style={styles.container}>
+      <h1 style={styles.title}>Wheely Hard</h1>
 
-      {/* Layout with Dice on the Left & Image in the Center */}
-      <div className="game-content">
-        {/* 3D DICE ON THE LEFT */}
-        <div className="dice-container">
-          <D10Dice guessCount={guessCount} />
-        </div>
+      {/* IMAGE CONTAINER */}
+      <div style={styles.imageContainer}>
+        {card && (
+          <img src={card.image_uris?.art_crop} alt="Magic Card Art" style={styles.cardImage} />
+        )}
 
-        {/* IMAGE IN THE CENTER */}
-        <div className="image-frame">
-          {card && (
-            <img src={card.image_uris?.art_crop} alt="Magic Card Art" className="card-image" />
-          )}
-          {coveredSquares.map((index) => (
-            <div key={index} className="cover-square" style={{
-              top: `${Math.floor(index / 3) * 33.33}%`,
-              left: `${(index % 3) * 33.33}%`
-            }}></div>
-          ))}
-        </div>
+        {/* BLACK BLOCKS */}
+        {coveredSquares.map((index) => (
+          <div key={index} style={{ ...styles.coverSquare, ...getSquarePosition(index) }}></div>
+        ))}
       </div>
 
-      {/* Guess Input */}
+      {/* INPUT FIELD */}
       <input
         type="text"
         value={guess}
         onChange={(e) => setGuess(e.target.value)}
         onKeyDown={(e) => e.key === "Enter" && handleGuess()}
-        placeholder="Enter your guess..."
-        className="guess-input"
+        placeholder="Is it Nyx Weaver..."
+        style={styles.inputField}
       />
 
-      <button className="patreon-button" onClick={() => window.open(PATREON_URL, "_blank")}>
-        ❤️ Support on Patreon
-      </button>
+      {/* PATREON BUTTON */}
+      <a href="https://www.patreon.com/c/MercadianBazaars" target="_blank" rel="noopener noreferrer">
+        <button style={styles.patreonButton}>❤️ Support on Patreon</button>
+      </a>
 
+      {/* GUESS COUNTER */}
+      <p style={styles.guessCounter}>Guesses Remaining: {guessCount}</p>
+
+      {/* FEEDBACK MESSAGE */}
+      {feedback && (
+        <p style={{ ...styles.feedback, opacity: feedback ? 1 : 0 }}>{feedback}</p>
+      )}
+
+      {/* POPUP FOR FULL CARD */}
       {showPopup && card && (
-        <div className="popup">
-          <div className="popup-content">
-            <button className="close-btn" onClick={closePopup}>✖</button>
-            <img src={card.image_uris?.normal} alt="Full Card" className="full-card-image" />
+        <div style={styles.popupOverlay}>
+          <div style={styles.popup}>
+            <button style={styles.closeButton} onClick={() => fetchCard()}>✖</button>
+            <img src={card.image_uris?.normal} alt="Magic Card" style={styles.fullCardImage} />
           </div>
         </div>
       )}
     </div>
   );
 }
+
+// FUNCTION TO POSITION BLACK SQUARES
+const getSquarePosition = (index) => ({
+  position: "absolute",
+  top: `${Math.floor(index / 3) * 33.33}%`,
+  left: `${(index % 3) * 33.33}%`,
+  width: "34%",
+  height: "34%",
+  backgroundColor: "black",
+  zIndex: 10,
+});
+
+// CSS-IN-JS STYLES
+const styles = {
+  container: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100vw",
+    height: "100vh",
+    backgroundColor: "#8B4513",
+    color: "white",
+  },
+  title: {
+    fontSize: "24px",
+    marginBottom: "20px",
+  },
+  imageContainer: {
+    position: "relative",
+    width: "300px",
+    height: "420px",
+    border: "4px solid white",
+    boxSizing: "border-box",
+    overflow: "hidden",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  cardImage: {
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+    display: "block",
+  },
+  coverSquare: {
+    position: "absolute",
+  },
+  inputField: {
+    marginTop: "20px",
+    padding: "10px",
+    fontSize: "16px",
+    width: "200px",
+    textAlign: "center",
+    borderRadius: "5px",
+  },
+  patreonButton: {
+    marginTop: "10px",
+    backgroundColor: "#FF424D",
+    color: "white",
+    padding: "10px",
+    border: "none",
+    borderRadius: "5px",
+    fontSize: "16px",
+    cursor: "pointer",
+    transition: "0.3s",
+  },
+  guessCounter: {
+    marginTop: "10px",
+    fontSize: "14px",
+  },
+  feedback: {
+    marginTop: "10px",
+    fontSize: "18px",
+    fontWeight: "bold",
+    transition: "opacity 1s ease-in-out",
+  },
+  popupOverlay: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    width: "100vw",
+    height: "100vh",
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  popup: {
+    position: "relative",
+    backgroundColor: "white",
+    padding: "20px",
+    borderRadius: "10px",
+    textAlign: "center",
+  },
+  fullCardImage: {
+    width: "300px",
+    height: "auto",
+  },
+  closeButton: {
+    position: "absolute",
+    top: "10px",
+    right: "10px",
+    backgroundColor: "red",
+    color: "white",
+    border: "none",
+    borderRadius: "50%",
+    width: "30px",
+    height: "30px",
+    cursor: "pointer",
+  },
+};
+
+export default MTGGuessingGame;
