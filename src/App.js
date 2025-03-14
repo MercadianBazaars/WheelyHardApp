@@ -69,7 +69,7 @@ export default function MTGGuessingGame() {
 
     let hint = "";
 
-    if (guess.trim().toLowerCase() === card.name.toLowerCase()) {
+    if (guess.trim().toLowerCase() === card.name.toLowerCase().trim()) {
       setFeedback("🔥 Magic Abused! 🔥");
       setCoveredSquares([]);
       hint = "✅ Correct";
@@ -90,7 +90,7 @@ export default function MTGGuessingGame() {
 
     setGuessHistory([...guessHistory, { name: guess, hint }]);
     setGuess("");
-    setGuessCount(guessCount - 1);
+    setGuessCount((prev) => Math.max(prev - 1, 0));
   };
 
   const revealMore = () => {
@@ -107,20 +107,20 @@ export default function MTGGuessingGame() {
   return (
     <div style={{
       display: "flex",
-      flexDirection: "row",
       justifyContent: "center",
       alignItems: "center",
       width: "100vw",
       height: "100vh",
       backgroundColor: "#8B4513",
       color: "white",
-      padding: "20px"
+      padding: "20px",
+      gap: "50px"
     }}>
-      {/* GAME AREA */}
-      <div style={{ textAlign: "center", marginRight: "40px" }}>
+      {/* MAIN GAME AREA */}
+      <div style={{ textAlign: "center" }}>
         <h1>Wheely Hard</h1>
 
-        {/* IMAGE BOX */}
+        {/* IMAGE DISPLAY */}
         <div style={{
           position: "relative",
           width: "300px",
@@ -144,7 +144,7 @@ export default function MTGGuessingGame() {
             />
           )}
 
-          {/* BLACK COVER BLOCKS */}
+          {/* BLACK BLOCKS */}
           {coveredSquares.map((index) => (
             <div
               key={index}
@@ -181,28 +181,6 @@ export default function MTGGuessingGame() {
             }}
           />
 
-          {/* Suggestions */}
-          {suggestions.length > 0 && (
-            <div style={{
-              position: "absolute",
-              backgroundColor: "white",
-              color: "black",
-              border: "1px solid gray",
-              width: "250px",
-              marginTop: "5px",
-              maxHeight: "150px",
-              overflowY: "auto",
-              textAlign: "left"
-            }}>
-              {suggestions.map((name, index) => (
-                <div key={index} onClick={() => setGuess(name)}
-                  style={{ padding: "5px", cursor: "pointer", borderBottom: "1px solid lightgray" }}>
-                  {name}
-                </div>
-              ))}
-            </div>
-          )}
-
           <button onClick={() => window.open("https://www.patreon.com/c/MercadianBazaars", "_blank")}
             style={{
               marginTop: "10px",
@@ -221,30 +199,37 @@ export default function MTGGuessingGame() {
         </div>
       </div>
 
-      {/* GUESS TRACKING TABLE */}
-      <div style={{ marginLeft: "40px" }}>
+      {/* TABLE TO TRACK GUESSES */}
+      <div>
         <table style={{
-          border: "2px solid white",
-          color: "black",
-          backgroundColor: "white",
+          borderCollapse: "collapse",
           width: "250px",
+          backgroundColor: "white",
+          color: "black",
+          borderRadius: "5px",
+          overflow: "hidden",
           textAlign: "center",
-          padding: "10px",
-          borderRadius: "5px"
+          boxShadow: "0px 0px 10px rgba(255, 255, 255, 0.2)"
         }}>
           <thead>
-            <tr>
-              <th>Guess</th>
-              <th>Hint</th>
+            <tr style={{ backgroundColor: "#ddd" }}>
+              <th style={{ padding: "10px", borderBottom: "2px solid black" }}>Guess</th>
+              <th style={{ padding: "10px", borderBottom: "2px solid black" }}>Hint</th>
             </tr>
           </thead>
           <tbody>
-            {guessHistory.map((entry, index) => (
-              <tr key={index}>
-                <td style={{ textDecoration: "underline", color: "red" }}>{entry.name}</td>
-                <td>{entry.hint}</td>
+            {guessHistory.length === 0 ? (
+              <tr>
+                <td colSpan="2" style={{ padding: "10px" }}>No guesses yet</td>
               </tr>
-            ))}
+            ) : (
+              guessHistory.map((entry, index) => (
+                <tr key={index}>
+                  <td style={{ padding: "8px", borderBottom: "1px solid gray" }}>{entry.name}</td>
+                  <td style={{ padding: "8px", borderBottom: "1px solid gray" }}>{entry.hint}</td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
